@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar 25 09:18:21 2026
+Created on Wed Jan 7 09:18:21 2026
 
 @author: furka
 """
@@ -180,7 +180,7 @@ def calculate_mmsc(y_pred, y_true):
     return mmsc.mean().item()
 
 # ==========================================
-# 2. GLOBAL EXECUTION (Variables Stay in Spyder)
+# 2. GLOBAL EXECUTION
 # ==========================================
 folder_path = r"[Enter your directory]"
 X_tensor, Y_tensor, freqs = load_and_prep_sv_data(folder_path)
@@ -239,7 +239,7 @@ for ep in range(epochs):
         avg_mmsc = test_mmsc/len(test_loader)
         print(f"Epoch {ep:03d} | Train Loss: {avg_train:.4f} | Test Loss: {avg_test:.4f} | Test MMSC: {avg_mmsc:.4f}")
 
-# Save the model to your hard drive so you never lose it again!
+# Save the model to your hard drive
 torch.save(model.state_dict(), os.path.join(folder_path, "final_fno_phone_model.pth"))
 print("Model saved to hard drive!")
 
@@ -262,12 +262,11 @@ plt.rcParams.update({
 model.eval()
 samples_to_plot = {'Walk': None, 'Jog': None, 'Bike': None}
 
-# THE FIX: Create a randomized list of indices to search through
 search_indices = list(range(len(test_dataset)))
 random.shuffle(search_indices)
 
 with torch.no_grad():
-    for i in search_indices: # <--- Now we search in a random order
+    for i in search_indices:
         x_sample, y_sample = test_dataset[i]
         
         # Check the one-hot encoded mobility state
@@ -294,7 +293,7 @@ for idx, gait in enumerate(gaits):
     with torch.no_grad():
         y_pred_tensor = model(x_input)
         
-        # Calculate MMSC for the title
+        # Calculate MMSC
         numerator = torch.sum(y_pred_tensor * y_true_tensor, dim=2) ** 2
         denominator = torch.sum(y_pred_tensor ** 2, dim=2) * torch.sum(y_true_tensor ** 2, dim=2)
         plot_mmsc = (numerator / (denominator + 1e-8)).mean().item()
@@ -323,7 +322,6 @@ from scipy.ndimage import gaussian_filter1d
 # ==========================================
 # 4. FINAL OMA
 # ==========================================
-
 print("\n--- Starting Final OMA Validation (Unbiased & Smoothed) ---")
 
 model.eval()
@@ -344,7 +342,7 @@ final_recovered_array_db = np.vstack(test_fno_recovered_sv_db)
 print("Batch processing complete.")
 
 # ==========================================
-# 4.1 LINEAR AVERAGING (Crucial OMA Step)
+# LINEAR AVERAGING (Crucial OMA Step)
 # ==========================================
 print("Performing Linear Averaging on SV1 across test set...")
 
@@ -361,7 +359,7 @@ averaged_benchmark_db = 10 * np.log10(averaged_benchmark_linear + 1e-12)
 averaged_recovered_db = 10 * np.log10(averaged_recovered_linear + 1e-12)
 
 # ==========================================
-# 4.2 GAUSSIAN SMOOTHING
+# GAUSSIAN SMOOTHING
 # ==========================================
 print("Applying Gaussian Smoothing pass...")
 sigma_smooth = 2 
@@ -370,7 +368,7 @@ averaged_benchmark_db_smoothed = gaussian_filter1d(averaged_benchmark_db, sigma=
 averaged_recovered_db_smoothed = gaussian_filter1d(averaged_recovered_db, sigma=sigma_smooth)
 
 # ==========================================
-# 4.3 FINAL OMA PLOT
+# FINAL OMA PLOT
 # ==========================================
 plt.rcParams.update({
     'font.size': 20,           
