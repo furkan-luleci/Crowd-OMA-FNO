@@ -1,7 +1,7 @@
 # Crowd-OMA-FNO
 Physics-Guided FNO for inverting biomechanical noise in crowdsensed bridge Operational Modal Analysis.
 
-## Paper & Citation
+## Paper
 Please refer to our paper for full methodological, experimental, and analytical details regarding this work.
 
 ## Dataset Note
