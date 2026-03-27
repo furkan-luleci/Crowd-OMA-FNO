@@ -47,7 +47,7 @@ def get_sv_curves(data_window, fs=62.25, nperseg=1024, freq_min=0.6, freq_max=15
     sv_curves_db = 10 * np.log10(sv_curves + 1e-12) 
     return sv_curves_db, masked_freqs
 
-def load_and_prep_sv_data(folder_path, window_size=1024, step_size=256):
+def load_and_prep_sv_data(folder_path, window_size=1024, step_size=512):
     crowd_path = os.path.join(folder_path, "Phone Crowdsensing.xlsx")
     ref_path = os.path.join(folder_path, "Phone Reference.xlsx")
     
